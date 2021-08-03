@@ -10,6 +10,7 @@
     clients to connect to ei. this program.
     
     Things this program can do at the moment:
+    Interact with a twitch chat amd exacute preset commands.
     Interact with the tf2 client using the console. In short use any console command that you could**.
     
     *RCON stands from remote console.
