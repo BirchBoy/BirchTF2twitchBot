@@ -27,8 +27,8 @@ from rcon import Client
 # Settings for how long a command will last.
 
 # Account stuff
-tw_username = "borchboy"
-tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
+tw_username = "TwitchAccountName"
+tw_token = 'TwitchChatToken'
 
 
 # The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
@@ -36,8 +36,8 @@ tw_prefix = "#"
 
 # Networking
 tf_ip = "127.0.0.1"
-tf_port = 55635
-tf_password = "FunnyPasswordForNerds"
+tf_port = 99999
+tf_password = "placeholder"
 
 # Timing for the commands
 movement_time = int(2)
