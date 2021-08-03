@@ -1,14 +1,36 @@
+"""
+    File name: Bot.py
+    Author: BirchBoy
+    Steam_id:[U:1:355965976]
+    Date created: 8/1/2021
+    Date last modified: 8/3/2021
+    Python Version: 3.9
+
+    Author Comments:
+    This program is a twitch bot that interacts with tf2 using the RCON* protocol which allows tf2 to host a port for
+    clients to connect to ei. this program.
+
+    Things this program can do at the moment:
+    Interact with a twitch chat amd exacute preset commands.
+    Interact with the tf2 client using the console. In short use any console command that you could**.
+
+    *RCON stands from remote console.
+    **Except faster.
+"""
+
+
 import random
 from time import sleep
-
 from twitchio.ext import commands
 from rcon import Client
 
 # Settings for how long a command will last.
 
 # Account stuff
-username = "borchboy"
+tw_username = "borchboy"
 tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
+
+
 # The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
 tw_prefix = "#"
 
@@ -19,7 +41,8 @@ tf_password = "FunnyPasswordForNerds"
 
 # Timing for the commands
 movement_time = int(2)
-attack_time = int(3)
+attack1_time = int(3)
+attack2_time = int(1)
 look_time = int(1)
 medic_call_time = int(30)
 # 0-1 not yet added.
@@ -29,7 +52,7 @@ random_class = int(0)
 
 def attackC():
     global chat_input, client, attack_time
-    chat_input = client.run("say_party \"Used Attack1")
+    chat_input = client.run("say_party \"Used Attack1".format())
     chat_input = client.run("+attack")
     sleep(attack_time)
     chat_input = client.run("-attack")
@@ -37,10 +60,10 @@ def attackC():
 
 
 def attack2C():
-    global chat_input, client, attack_time
+    global chat_input, client, attack2_time
     chat_input = client.run("say_party \"Used Attack2")
     chat_input = client.run("+attack2")
-    sleep(attack_time)
+    sleep(attack2_time)
     chat_input = client.run("-attack2")
     return chat_input
 
@@ -198,15 +221,10 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def stop(self, ctx: commands.Context):
-        await ctx.send("{0} Used stop program stopping.".format(ctx.author.name))
-        sleep(1)
-        await ctx.send("3")
-        sleep(1)
-        await ctx.send("2")
-        sleep(1)
-        await ctx.send("1")
+        await ctx.send("{0} Used stop: program stopping.".format(ctx.author.name))
         sleep(1)
         await ctx.send("Program terminated")
+        quit()
 
     @commands.command()
     async def help(self, ctx: commands.Context):
