@@ -1,3 +1,3 @@
 # BirchTF2twitchBot
 
-A nonfunctional build just meant to store the code.
+A semi-functional build just meant to store the code.
