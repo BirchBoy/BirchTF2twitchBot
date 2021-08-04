@@ -32,8 +32,8 @@ from rcon import Client
 # Settings for how long a command will last.
 
 # Account stuff
-tw_username = "borchboy"
-tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
+tw_username = "Pain"
+tw_token = 'Token'
 
 
 # The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
