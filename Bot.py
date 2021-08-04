@@ -11,11 +11,16 @@
     clients to connect to ei. this program.
 
     Things this program can do at the moment:
-    Interact with a twitch chat amd exacute preset commands.
-    Interact with the tf2 client using the console. In short use any console command that you could**.
+    1.Interact with a twitch chat amd execute preset commands.
+    2.Interact with the tf2 client using the console. In short use any console command that you could**.
 
     *RCON stands from remote console.
     **Except faster.
+
+    To Dos:
+    1.Needs a tutorial from setup.
+    2.Needs a limit for how many commands someone can send into the bot.
+    4.Needs to add more comments.
 """
 
 
@@ -27,17 +32,18 @@ from rcon import Client
 # Settings for how long a command will last.
 
 # Account stuff
-tw_username = "TwitchAccountName"
-tw_token = 'TwitchChatToken'
+tw_username = "borchboy"
+tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
 
 
 # The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
+# There are more just the ones I recommend.
 tw_prefix = "#"
 
 # Networking
 tf_ip = "127.0.0.1"
-tf_port = 99999
-tf_password = "placeholder"
+tf_port = 55635
+tf_password = "FunnyPasswordForNerds"
 
 # Timing for the commands
 movement_time = int(2)
@@ -94,13 +100,30 @@ def forwardC():
     chat_input = client.run("-forward")
     return chat_input
 
-
 def backC():
     global chat_input, client, movement_time
-    client.run("say_party \"Used Backwards")
+    client.run("say_party \"Used back")
     chat_input = client.run("+back")
     sleep(movement_time)
     chat_input = client.run("-back")
+    return chat_input
+
+
+
+def rstrafeC():
+    global chat_input, client, movement_time
+    client.run("say_party \"Used Rstrafe")
+    chat_input = client.run("+moveright")
+    sleep(movement_time)
+    chat_input = client.run("-moveright")
+    return chat_input
+
+def lstrafeC():
+    global chat_input, client, movement_time
+    client.run("say_party \"Used Lstrafe")
+    chat_input = client.run("+moveleft")
+    sleep(movement_time)
+    chat_input = client.run("-moveleft")
     return chat_input
 
 
@@ -219,16 +242,16 @@ class Bot(commands.Bot):
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
 
+# Defines the commands for the twitch bot to take in from the twitch chat.
     @commands.command()
     async def stop(self, ctx: commands.Context):
-        await ctx.send("{0} Used stop: program stopping.".format(ctx.author.name))
-        sleep(1)
-        await ctx.send("Program terminated")
-        quit()
-
-    @commands.command()
-    async def help(self, ctx: commands.Context):
-        await ctx.send("{0} Used Help".format(ctx.author.name))
+        if ctx.author.name == self.nick:
+            await ctx.send("{0} Used stop: program stopping.".format(ctx.author.name))
+            sleep(1)
+            await ctx.send("Program terminated")
+            quit()
+        else:
+            await ctx.send("{0} You do not have permission to do that.".format(ctx.author.name))
 
     @commands.command()
     async def attack1(self, ctx: commands.Context):
@@ -261,9 +284,79 @@ class Bot(commands.Bot):
         backC()
 
     @commands.command()
+    async def rstrafe(self, ctx: commands.Context):
+        await ctx.send("{0} Used Rstrafe!".format(ctx.author.name))
+        rstrafeC()
+
+    @commands.command()
+    async def lstrafe(self, ctx: commands.Context):
+        await ctx.send("{0} Used Lstrafe!".format(ctx.author.name))
+        lstrafeC()
+
+    @commands.command()
     async def jump(self, ctx: commands.Context):
         await ctx.send("{0} Used Jump!".format(ctx.author.name))
         jumpC()
+
+    @commands.command()
+    async def use(self, ctx: commands.Context):
+        await ctx.send("{0} Used Use!".format(ctx.author.name))
+        useC()
+
+    @commands.command()
+    async def random_loadout(self, ctx: commands.Context):
+        await ctx.send("{0} Used Random_Loadout!".format(ctx.author.name))
+        rand_loadoutC()
+
+    @commands.command()
+    async def call_medic(self, ctx: commands.Context):
+        await ctx.send("{0} Used Call_Medic!".format(ctx.author.name))
+        helpC()
+
+    @commands.command()
+    async def scout(self, ctx: commands.Context):
+        await ctx.send("{0} Used Scout!".format(ctx.author.name))
+        scoutC()
+
+    @commands.command()
+    async def medic(self, ctx: commands.Context):
+        await ctx.send("{0} Used Medic!".format(ctx.author.name))
+        medicC()
+
+    @commands.command()
+    async def demoman(self, ctx: commands.Context):
+        await ctx.send("{0} Used Demoman!".format(ctx.author.name))
+        demomanC()
+
+    @commands.command()
+    async def pyro(self, ctx: commands.Context):
+        await ctx.send("{0} Used Pyro!".format(ctx.author.name))
+        pyroC()
+
+    @commands.command()
+    async def engineer(self, ctx: commands.Context):
+        await ctx.send("{0} Used Engineer!".format(ctx.author.name))
+        engineerC()
+
+    @commands.command()
+    async def sniper(self, ctx: commands.Context):
+        await ctx.send("{0} Used Sniper!".format(ctx.author.name))
+        sniperC()
+
+    @commands.command()
+    async def spy(self, ctx: commands.Context):
+        await ctx.send("{0} Used Spy!".format(ctx.author.name))
+        spyC()
+
+    @commands.command()
+    async def soldier(self, ctx: commands.Context):
+        await ctx.send("{0} Used Soldier!".format(ctx.author.name))
+        soldierC()
+
+    @commands.command()
+    async def heavy(self, ctx: commands.Context):
+        await ctx.send("{0} Used Heavy!".format(ctx.author.name))
+        heavyC()
 
 
 with Client(tf_ip, tf_port, passwd=tf_password) as client:
