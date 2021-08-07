@@ -8,59 +8,85 @@
 
     Author Comments:
     This program is a twitch bot that interacts with tf2 using the RCON* protocol which allows tf2 to host a port for
-    clients to connect to ei. this program.
-
-    Things this program can do at the moment:
-    1.Interact with a twitch chat amd execute preset commands.
-    2.Interact with the tf2 client using the console. In short use any console command that you could**.
-
-    *RCON stands from remote console.
-    **Except faster.
-
-    To Dos:
-    1.Needs a tutorial from setup.
-    2.Needs a limit for how many commands someone can send into the bot.
-    4.Needs to add more comments.
+    clients to connect to ei this program.
 """
-
 
 import random
 from time import sleep
 from twitchio.ext import commands
 from rcon import Client
 
-# Settings for how long a command will last.
+# DO NOT EDIT THIS VAR.
+s_error = 0
+
+
+points_users = {
+    "borchboy": 100000
+}
 
 # Account stuff
-tw_username = "Pain"
-tw_token = 'Token'
-
+tw_username = "borchboy" # Just put your twitch id here.
+tw_token = '' # Twitch chat token here.
 
 # The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
 # There are more just the ones I recommend.
 tw_prefix = "#"
 
-# Networking
+# Networking/RCON
 tf_ip = "127.0.0.1"
 tf_port = 55635
 tf_password = "FunnyPasswordForNerds"
 
-# Timing for the commands
-movement_time = int(2)
+# Points
+points_time = 60
+points_amount = 100
+join_points = 200
+
+# Points pricing
+attack_points = 50
+move_points = 100
+look_points = 100
+class_points = 200
+sp_points = 200
+
+# Settings for how long a command will last.
+movement_time = int(1)
 attack1_time = int(3)
 attack2_time = int(1)
-look_time = int(1)
-medic_call_time = int(30)
-# 0-1 not yet added.
-taunt_active = int(0)
-random_class = int(0)
+look_time = float(0.45)
+medic_call_time = int(20)
 
 
+# Basic join things
+def add_all():
+    while True:
+        for key in points_users.keys():
+            points_users[key] += points_amount
+            sleep(points_time)
+
+
+def join(username_chat, points):
+    points_users.update({username_chat: points})
+    return points_users
+
+
+def spend(username_chat, cost):
+    global s_error
+    num = points_users.get(username_chat)
+    if num >= cost:
+        num = num - cost
+        points_users.update({username_chat: num})
+    else:
+        s_error = True
+    return points_users, s_error
+
+
+# Command defs.
 def attackC():
-    global chat_input, client, attack_time
-    chat_input = client.run("say_party \"Used Attack1".format())
+    global chat_input, client, attack1_time
+    chat_input = client.run("say_party \"Used Attack".format())
     chat_input = client.run("+attack")
-    sleep(attack_time)
+    sleep(attack1_time)
     chat_input = client.run("-attack")
     return chat_input
 
@@ -100,6 +126,7 @@ def forwardC():
     chat_input = client.run("-forward")
     return chat_input
 
+
 def backC():
     global chat_input, client, movement_time
     client.run("say_party \"Used back")
@@ -109,7 +136,6 @@ def backC():
     return chat_input
 
 
-
 def rstrafeC():
     global chat_input, client, movement_time
     client.run("say_party \"Used Rstrafe")
@@ -117,6 +143,7 @@ def rstrafeC():
     sleep(movement_time)
     chat_input = client.run("-moveright")
     return chat_input
+
 
 def lstrafeC():
     global chat_input, client, movement_time
@@ -147,8 +174,10 @@ def useC():
 
 def rand_loadoutC():
     rand_load = random.randint(1, 4)
-    client.run("say_party \"Used Random Loadout {}".format(rand_load))
-    chat_input = client.run("load_itempreset {}".format(rand_load))
+    client.run("say_party \"Used Random Loadout {}"
+               .format(rand_load))
+    chat_input = client.run("load_itempreset {}"
+                            .format(rand_load))
     return chat_input
 
 
@@ -242,121 +271,217 @@ class Bot(commands.Bot):
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
 
-# Defines the commands for the twitch bot to take in from the twitch chat.
-    @commands.command()
-    async def stop(self, ctx: commands.Context):
-        if ctx.author.name == self.nick:
-            await ctx.send("{0} Used stop: program stopping.".format(ctx.author.name))
-            sleep(1)
-            await ctx.send("Program terminated")
-            quit()
+    """
+    Command with spend template
+    
+        @commands.command()
+    async def points_template(self, ctx: commands.Context):
+        global s_error
+        spend(username_chat=ctx.author.name, cost=100)
+        if s_error == 1:
+            await ctx.send("{0}, you can't afford that, you have {1:.0f} points.".format(ctx.author.name, points_users[ctx.author.name]))
         else:
-            await ctx.send("{0} You do not have permission to do that.".format(ctx.author.name))
+            await ctx.send("{0} it is done.".format(ctx.author.name))
+            s_error = 0
+    """
+    @commands.command()
+    async def add(self, ctx: commands.Context):
+        join(username_chat=ctx.author.name, points=join_points)
+        await ctx.send("Added {0}, You have {1:.0f} points!".format(ctx.author.name, points_users[ctx.author.name]))
 
     @commands.command()
-    async def attack1(self, ctx: commands.Context):
-        await ctx.send("{0} Used Attack1!".format(ctx.author.name))
-        attackC()
+    async def points(self, ctx: commands.Context):
+        await ctx.send("{0}, You have {1:.0f} points!".format(ctx.author.name, points_users[ctx.author.name]))
+        print("{0} has {1} points.".format(ctx.author.name, points_users[ctx.author.name]))
+
+    @commands.command()
+    async def attack(self, ctx: commands.Context):
+        spend(username_chat=ctx.author.name, cost=attack_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Attack!".format(ctx.author.name))
+            attackC()
 
     @commands.command()
     async def attack2(self, ctx: commands.Context):
-        await ctx.send("{0} Used Attack2!".format(ctx.author.name))
-        attack2C()
+        spend(username_chat=ctx.author.name, cost=attack_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Attack2!".format(ctx.author.name))
+            attack2C()
 
     @commands.command()
     async def right(self, ctx: commands.Context):
-        await ctx.send("{0} Used Right!".format(ctx.author.name))
-        rightC()
+        spend(username_chat=ctx.author.name, cost=look_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Right!".format(ctx.author.name))
+            rightC()
 
     @commands.command()
     async def left(self, ctx: commands.Context):
-        await ctx.send("{0} Used Left!".format(ctx.author.name))
-        leftC()
+        spend(username_chat=ctx.author.name, cost=look_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Left!".format(ctx.author.name))
+            leftC()
 
     @commands.command()
     async def forward(self, ctx: commands.Context):
-        await ctx.send("{0} Used Forward!".format(ctx.author.name))
-        forwardC()
+        spend(username_chat=ctx.author.name, cost=move_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Forward!".format(ctx.author.name))
+            forwardC()
 
     @commands.command()
     async def back(self, ctx: commands.Context):
-        await ctx.send("{0} Used Back!".format(ctx.author.name))
-        backC()
+        spend(username_chat=ctx.author.name, cost=move_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Back!".format(ctx.author.name))
+            backC()
 
     @commands.command()
-    async def rstrafe(self, ctx: commands.Context):
-        await ctx.send("{0} Used Rstrafe!".format(ctx.author.name))
-        rstrafeC()
+    async def moveright(self, ctx: commands.Context):
+        spend(username_chat=ctx.author.name, cost=move_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Rstrafe!".format(ctx.author.name))
+            rstrafeC()
 
     @commands.command()
-    async def lstrafe(self, ctx: commands.Context):
-        await ctx.send("{0} Used Lstrafe!".format(ctx.author.name))
-        lstrafeC()
+    async def moveleft(self, ctx: commands.Context):
+        spend(username_chat=ctx.author.name, cost=move_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Lstrafe!".format(ctx.author.name))
+            lstrafeC()
 
     @commands.command()
     async def jump(self, ctx: commands.Context):
-        await ctx.send("{0} Used Jump!".format(ctx.author.name))
-        jumpC()
+        spend(username_chat=ctx.author.name, cost=move_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Jump!".format(ctx.author.name))
+            jumpC()
 
     @commands.command()
     async def use(self, ctx: commands.Context):
-        await ctx.send("{0} Used Use!".format(ctx.author.name))
-        useC()
+        spend(username_chat=ctx.author.name, cost=sp_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Use!".format(ctx.author.name))
+            useC()
 
     @commands.command()
     async def random_loadout(self, ctx: commands.Context):
-        await ctx.send("{0} Used Random_Loadout!".format(ctx.author.name))
-        rand_loadoutC()
+        spend(username_chat=ctx.author.name, cost=sp_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Random_Loadout!".format(ctx.author.name))
+            rand_loadoutC()
 
     @commands.command()
     async def call_medic(self, ctx: commands.Context):
-        await ctx.send("{0} Used Call_Medic!".format(ctx.author.name))
-        helpC()
+        spend(username_chat=ctx.author.name, cost=sp_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Call_Medic!".format(ctx.author.name))
+            helpC()
 
     @commands.command()
     async def scout(self, ctx: commands.Context):
-        await ctx.send("{0} Used Scout!".format(ctx.author.name))
-        scoutC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Scout!".format(ctx.author.name))
+            scoutC()
 
     @commands.command()
     async def medic(self, ctx: commands.Context):
-        await ctx.send("{0} Used Medic!".format(ctx.author.name))
-        medicC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Medic!".format(ctx.author.name))
+            medicC()
 
     @commands.command()
     async def demoman(self, ctx: commands.Context):
-        await ctx.send("{0} Used Demoman!".format(ctx.author.name))
-        demomanC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Demoman!".format(ctx.author.name))
+            demomanC()
 
     @commands.command()
     async def pyro(self, ctx: commands.Context):
-        await ctx.send("{0} Used Pyro!".format(ctx.author.name))
-        pyroC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Pyro!".format(ctx.author.name))
+            pyroC()
 
     @commands.command()
     async def engineer(self, ctx: commands.Context):
-        await ctx.send("{0} Used Engineer!".format(ctx.author.name))
-        engineerC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Engineer!".format(ctx.author.name))
+            engineerC()
 
     @commands.command()
     async def sniper(self, ctx: commands.Context):
-        await ctx.send("{0} Used Sniper!".format(ctx.author.name))
-        sniperC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Sniper!".format(ctx.author.name))
+            sniperC()
 
     @commands.command()
     async def spy(self, ctx: commands.Context):
-        await ctx.send("{0} Used Spy!".format(ctx.author.name))
-        spyC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Spy!".format(ctx.author.name))
+            spyC()
 
     @commands.command()
     async def soldier(self, ctx: commands.Context):
-        await ctx.send("{0} Used Soldier!".format(ctx.author.name))
-        soldierC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Soldier!".format(ctx.author.name))
+            soldierC()
 
     @commands.command()
     async def heavy(self, ctx: commands.Context):
-        await ctx.send("{0} Used Heavy!".format(ctx.author.name))
-        heavyC()
+        spend(username_chat=ctx.author.name, cost=class_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Heavy!".format(ctx.author.name))
+            heavyC()
 
 
 with Client(tf_ip, tf_port, passwd=tf_password) as client:
