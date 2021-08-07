@@ -10,13 +10,12 @@
     clients to connect to ei. this program.
 
     Things this program can do at the moment:
-    1.Interact with a twitch chat amd execute preset commands.
-    2.Interact with the tf2 client using the console. In short use any console command that you could**.
+    1.Interact with a twitch chat and execute preset commands.
+    2.Interact with the tf2 client using the console. In short use any console command that you could.
+    3.Point system.
 
     *RCON stands from remote console.
-    **Except faster.
 
-    To Dos:
+    To-dos:
     1.Needs a tutorial from setup.
-    2.Needs a limit for how many commands someone can send into the bot.
-    4.Needs to add more comments.
+    2.Needs to add more comments.
