@@ -7,32 +7,30 @@
     Python Version: 3.9
 
     Author Comments:
-    This program is a twitch bot that interacts with tf2 using the RCON* protocol which allows tf2 to host a port for
-    clients to connect to ei this program.
+    This program causes pain.
 """
 
 import random
+import threading
 from time import sleep
 from twitchio.ext import commands
-from rcon import Client
+from rcon import Client, client
 
-# DO NOT EDIT THIS VAR.
 s_error = 0
-
-
 points_users = {
-    "borchboy": 100000
+    "borchboy": 100000,
+    "simfox9": 99999
 }
 
 # Account stuff
-tw_username = "borchboy" # Just put your twitch id here.
-tw_token = '' # Twitch chat token here.
+tw_username = "borchboy"  # Twitch username.
+tw_token = 'chat_token'
 
-# The prefix prefix can be anything. here are some examples: ! @ # $ % % ^ & * < > ?
+# The prefix prefix can be anything. here are some examples: ! # $ % % ^ & * < > ?
 # There are more just the ones I recommend.
-tw_prefix = "#"
+tw_prefix = "!"
 
-# Networking/RCON
+# Networking
 tf_ip = "127.0.0.1"
 tf_port = 55635
 tf_password = "FunnyPasswordForNerds"
@@ -46,8 +44,8 @@ join_points = 200
 attack_points = 50
 move_points = 100
 look_points = 100
-class_points = 200
-sp_points = 200
+class_points = 200  # I think you know
+sp_points = 200  # taunts
 
 # Settings for how long a command will last.
 movement_time = int(1)
@@ -57,7 +55,7 @@ look_time = float(0.45)
 medic_call_time = int(20)
 
 
-# Basic join things
+# adds points to all "added" users.
 def add_all():
     while True:
         for key in points_users.keys():
@@ -65,11 +63,13 @@ def add_all():
             sleep(points_time)
 
 
+# Join command.
 def join(username_chat, points):
     points_users.update({username_chat: points})
     return points_users
 
 
+# MONEY
 def spend(username_chat, cost):
     global s_error
     num = points_users.get(username_chat)
@@ -284,6 +284,7 @@ class Bot(commands.Bot):
             await ctx.send("{0} it is done.".format(ctx.author.name))
             s_error = 0
     """
+
     @commands.command()
     async def add(self, ctx: commands.Context):
         join(username_chat=ctx.author.name, points=join_points)
@@ -484,6 +485,20 @@ class Bot(commands.Bot):
             heavyC()
 
 
+    @commands.command()
+    async def taunt(self, ctx: commands.Context):
+        spend(username_chat=ctx.author.name, cost=sp_points)
+        if s_error:
+            await ctx.send("{0} you don't have enough points!".format(ctx.author.name))
+        else:
+            await ctx.send("{0} Used Left!".format(ctx.author.name))
+            tauntC()
+
+
+# Threading  that deals with giving points.
+threading.Thread(target=add_all).start()
+
+# Rcon sends commands to tf2's console.
 with Client(tf_ip, tf_port, passwd=tf_password) as client:
     bot = Bot()
     bot.run()
