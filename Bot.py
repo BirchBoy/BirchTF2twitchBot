@@ -19,17 +19,18 @@ from rcon import Client, client
 s_error = 0
 
 # Account stuff
-tw_username = "Twitch User Name"
-tw_token = 'Token'
+tw_username = "Twitch account name"
+tw_token = 'Twitch Chat Token'
 
 # The prefix prefix can be anything. here are some examples: ! # $ % % ^ & * < > ?
 # There are more just the ones I recommend.
 tw_prefix = "!"
 
 # Networking
-tf_ip = "127.0.0.1"
-tf_port = 55635
-tf_password = "FunnyPasswordForNerds"
+tf_ip = "127.0.0.1"  # Leave this alone.
+tf_port = PORT
+tf_password = "PASSWORD"
+
 
 # Settings for how long a command will last.
 movement_time = 1
