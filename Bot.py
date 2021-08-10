@@ -6,7 +6,7 @@
     Date last modified: 8/7/2021
     Python Version: 3.9
 
-    An  Author's note
+    An Author's note
     This program causes pain.
 """
 
