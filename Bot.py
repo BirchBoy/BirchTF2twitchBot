@@ -19,8 +19,8 @@ from rcon import Client, client
 s_error = 0
 
 # Account stuff
-tw_username = "borchboy"
-tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
+tw_username = "Twitch User Name"
+tw_token = 'Token'
 
 # The prefix prefix can be anything. here are some examples: ! # $ % % ^ & * < > ?
 # There are more just the ones I recommend.
