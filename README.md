@@ -16,6 +16,4 @@
 
     *RCON stands from remote console.
 
-    To-dos:
-    1.Needs a tutorial from setup.
-    2.Needs to add more comments.
+    The code needs to be cleaned up a bit.
