@@ -3,7 +3,7 @@
     Steam_id:[U:1:355965976]
     Date created: 8/1/2021
     Date last modified: 8/3/2021
-    Python Version: 3.9
+    Python Version: 3.9.6
 
     Author Comments:
     This program is a twitch bot that interacts with tf2 using the RCON* protocol which allows tf2 to host a port for
