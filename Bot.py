@@ -6,7 +6,7 @@
     Date last modified: 8/7/2021
     Python Version: 3.9
 
-    Author Comments:
+    An  Author's note
     This program causes pain.
 """
 
@@ -17,14 +17,10 @@ from twitchio.ext import commands
 from rcon import Client, client
 
 s_error = 0
-points_users = {
-    "borchboy": 100000,
-    "simfox9": 99999
-}
 
 # Account stuff
-tw_username = "borchboy"  # Twitch username.
-tw_token = 'chat_token'
+tw_username = "borchboy"
+tw_token = 'y3lxl3uxpghaqq2u2yrgy4cs96ipss'
 
 # The prefix prefix can be anything. here are some examples: ! # $ % % ^ & * < > ?
 # There are more just the ones I recommend.
@@ -34,6 +30,13 @@ tw_prefix = "!"
 tf_ip = "127.0.0.1"
 tf_port = 55635
 tf_password = "FunnyPasswordForNerds"
+
+# Settings for how long a command will last.
+movement_time = 1
+attack1_time = 3
+attack2_time = 1
+look_time = 0.45
+medic_call_time = 20
 
 # Points
 points_time = 60
@@ -47,12 +50,9 @@ look_points = 100
 class_points = 200  # I think you know
 sp_points = 200  # taunts
 
-# Settings for how long a command will last.
-movement_time = int(1)
-attack1_time = int(3)
-attack2_time = int(1)
-look_time = float(0.45)
-medic_call_time = int(20)
+points_users = {
+    tw_username: 9999999  # Adds 9999999 number of points to you.
+}
 
 
 # adds points to all "added" users.
@@ -260,7 +260,7 @@ def heavyC():
     chat_input = client.run("join_class heavyweapons")
     return chat_input
 
-
+# The Twitch part of this.
 class Bot(commands.Bot):
 
     def __init__(self):
@@ -483,7 +483,6 @@ class Bot(commands.Bot):
         else:
             await ctx.send("{0} Used Heavy!".format(ctx.author.name))
             heavyC()
-
 
     @commands.command()
     async def taunt(self, ctx: commands.Context):
