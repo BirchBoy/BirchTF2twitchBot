@@ -17,3 +17,5 @@
     *RCON stands from remote console.
 
     The code needs to be cleaned up a bit.
+    
+    Read readme.docx for more information.
