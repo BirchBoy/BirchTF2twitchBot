@@ -1,3 +1,5 @@
+    Outdated and being replaced with a new version around 1/1/2022
+    
     File name: Bot.py
     Author: BirchBoy
     Steam_id:[U:1:355965976]
@@ -12,7 +14,6 @@
     Things this program can do at the moment:
     1.Interact with a twitch chat and execute preset commands.
     2.Interact with the tf2 client using the console. In short use any console command that you could.
-    3.Point system.
 
     *RCON stands from remote console.
 
