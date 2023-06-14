@@ -18,3 +18,5 @@
     Read readme.docx for more information.
     
     *RCON stands from remote console.
+
+    No longer maintained.
