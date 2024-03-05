@@ -11,8 +11,8 @@ A Python script meant to make it so a Twitch streamer can have their chat intera
   - Access Token: Go to https://twitchtokengenerator.com/ and follow their instructions on how to generate your access token. If you would like to use a more secure method, there are alternative methods. **Never give this to anyone!**
 
 - Config File: Run Bot.py once to generate config.cfg
-  - Under [Twitch Information], replace USERNAME in the quotation marks with your username in lowercase. It should look like this, ```username = "burchburch"```.
-  - Replace TOKEN with your access token in the same way as your username. ```access_token = "wadawdfoiesfuiehfisuohefpp309j"```. Don't use this. It is not a real token.
+  - Under [Twitch Information], replace USERNAME with your username in lowercase. It should look like this, `username = burchburch`.
+  - Replace TOKEN with your access token in the same way as your username. `access_token = wadawdfoiesfuiehfisuohefpp309j`. Don't use this. It is not a real token.
 
 - Launch Options: There should be a file called rcon.cfg copy the section of the file that it tells you to into source games launch options.
 - Then put rcon.cfg into `Team Fortress 2/tf/cfg`
