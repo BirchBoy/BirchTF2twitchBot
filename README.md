@@ -2,7 +2,7 @@
 # SourceTwitchIntergration
 
 A Python script meant to make it so a Twitch streamer can have their chat interact with the game through RCON.
-By default it is configured for Team Fortress 2.
+By default, it is configured for Team Fortress 2.
 
 ## Setup
 
@@ -24,9 +24,9 @@ Now that you have finished the configuration, you can have real fun. Pure chaos 
 
 ## This is still under construction
 
-Many things are still incomplete. This document is a good example of that. Please be patient while I work out the kinks.
+Many things are still incomplete, and this document is a good example. Please be patient while I work out the kinks.
 
-Missing feature:
+Missing features:
 
 - Async on commands
 - Easy custom commands
