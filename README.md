@@ -1,5 +1,5 @@
 
-# SourceTwitchIntergration
+# Source Twitch Intergration
 
 A Python script meant to make it so a Twitch streamer can have their chat interact with the game through RCON.
 By default, it is configured for Team Fortress 2.
